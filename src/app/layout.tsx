@@ -88,6 +88,10 @@ export default function RootLayout({
               .nav-actions {
                 margin-left: 0.5rem;
               }
+              /* ensure page content sits below the fixed top nav on small screens */
+              main {
+                padding-top: 64px;
+              }
             }
           `}
         </style>
