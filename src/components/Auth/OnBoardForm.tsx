@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link'; 
 interface RegisterFormProps {
   defaultUserType?: 'student' | 'teacher';
 }
@@ -12,47 +11,23 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
   const [isCollegeStudent, setIsCollegeStudent] = useState(false);
   const [isLoading,setIsLoading]=useState(false);
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    otp: '',
-    password: '',
-    confirmPassword: '',
     // Additional fields for teachers
     subject: '',
     qualification: '',
     // Additional fields for students
     rollNumber: '',
-    class: '',
-    studentSubject: '',
+    schoolClass: '',
     // College student specific fields
     stream: '',
     year: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-   const [showPassword, setShowPassword] = useState(false);
-   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+ 
+  
+   
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full name is required';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
 
     // Teacher-specific validations
     if (userType === 'teacher') {
@@ -78,8 +53,8 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
           newErrors.year = 'Year is required';
         }
       } else {
-        if (!formData.class.trim()) {
-          newErrors.class = 'Class is required';
+        if (!formData.schoolClass.trim()) {
+          newErrors.schoolClass = 'Class is required';
         }
       }
     }
@@ -98,9 +73,6 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
         const requestData = {
           userType,
           ...formData,
-          fullName: formData.fullName,
-          email: formData.email,
-          password: formData.password,
           ...(userType === 'student' 
             ? {
                 rollNumber: formData.rollNumber,
@@ -111,7 +83,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                       year: formData.year,
                     }
                   : {
-                      class: formData.class,
+                      schoolClass: formData.schoolClass,
                     }
                 ),
               }
@@ -122,8 +94,9 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
           ),
         };
        try{
-        const response = await fetch('/api/register', {
+        const response = await fetch('/api/onboarding', {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -131,15 +104,6 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
         });
 
         const data = await response.json();
-        if(data.error==="Email already exists"){
-          alert("This email is already registered! Use a different account");
-          setFormData({
-            ...formData,
-            email: ''
-          });
-         
-        }
-
         if (!response.ok) {
           // Handle validation errors from the API
           if (data.errors) {
@@ -155,8 +119,11 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
 
         // Registration successful
         console.log('Registration successful:', data);
-        alert("Registration successful! Please login to continue");
-        router.push('/login');
+        alert("Signed up successfully! Directing to dashboard...");
+        if(userType==='teacher')
+           router.push('/teacher-dashboard');
+        else 
+           router.push('/student-dashboard');
       } catch (error) {
         console.error('Registration error:', error);
         setErrors({
@@ -245,14 +212,11 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
           border-color: #ff4444;
           background-color: rgba(255, 68, 68, 0.05);
         }
-          
-    
-    }
       `}</style>
       <div className="register-card">
         <div className="register-header">
           <h1>Create Account</h1>
-          <p>Join our community as a {userType}</p>
+          <p>Asking some additional information</p>
         </div>
 
         <div className="user-type-toggle">
@@ -275,82 +239,7 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
         </div>
 
         <form onSubmit={handleSubmit} className="register-form">
-          <div className="form-group">
-            <div className="input-group">
-              <input
-                type="text"
-                name="fullName"
-                pattern="[a-zA-Z\s]+"
-                placeholder="Full Name"
-                value={formData.fullName}
-                onChange={handleChange}
-                className={errors.fullName ? 'error' : ''}
-              />
-              <i className="fas fa-user"></i>
-            </div>
-            {errors.fullName && <span className="error-message">{errors.fullName}</span>}
-          </div>
-
-          <div className="form-group">
-            <div className="input-group">
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleChange}
-                className={errors.email ? 'error' : ''}
-              />
-              
-            </div>
-            {errors.email && <span className="error-message">{errors.email}</span>}
-             
-          </div>
-
-          <div className="form-group">
-            <div className="input-group">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? 'error' : ''}
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-              </button>
-            </div>
-            {errors.password && <span className="error-message">{errors.password}</span>}
-          </div>
-
-          <div className="form-group">
-            <div className="input-group">
-              <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={errors.confirmPassword ? 'error' : ''}
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                <i className={`fas ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-              </button>
-            </div>
-            {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
-          </div>
-         
-
-
+          
           {userType === 'student' && (
             <>
               <div className="form-group">
@@ -382,9 +271,6 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                 </div>
               </div>
 
-              
-
-              
               {isCollegeStudent ? (
                 <>
                   <div className="form-group">
@@ -434,16 +320,16 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
                     type="number"
                     min='1'
                     max='12'
-                    name="class"
+                    name="schoolClass"
                     placeholder="Class"
-                    value={formData.class}
+                    value={formData.schoolClass}
                     onWheel={(e) => e.currentTarget.blur()}
                     onChange={handleChange}
-                    className={errors.class ? 'error' : ''}
+                    className={errors.schoolClass ? 'error' : ''}
                   />
                   <i className="fas fa-school"></i>
                 </div>
-                {errors.class && <span className="error-message">{errors.class}</span>}
+                {errors.schoolClass && <span className="error-message">{errors.schoolClass}</span>}
               </div>
 
                 </>
@@ -507,12 +393,8 @@ export default function RegisterForm({ defaultUserType = 'student' }: RegisterFo
 
           <button type="submit" className="register-button" disabled={isLoading}>
             <i className="fas fa-user-plus"></i>
-            { isLoading? "Registering...": `Register as ${userType}`}
+            { isLoading? "Signing up...": `Sign up as ${userType}`}
           </button>
-
-          <div className="login-link">
-            Already have an account or Want to Sign up with Google? <Link href="/login">Click here</Link>
-          </div>
         </form>
       </div>
     </div>

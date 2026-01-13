@@ -1,9 +1,25 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { Line } from 'react-chartjs-2'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
+
+// Register chart components
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 const Results = () => {
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(true)
+  const [chartData, setChartData] = useState(null)
+  const [chartOptions, setChartOptions] = useState(null)
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -22,6 +38,60 @@ const Results = () => {
             completedAt: result.completedAt
           }))
           setResults(formattedResults)
+
+          const getPercentage = (score, marks) => {
+  if (!marks || marks === 0) return 0
+  return ((score / marks) * 100).toFixed(1)
+}
+
+// Sort results chronologically (optional)
+const sortedResults = [...results].sort(
+  (a, b) => new Date(a.completedAt) - new Date(b.completedAt)
+)
+
+// Prepare chart data
+const chartData = {
+  labels: sortedResults.map(r => r.title || 'Untitled'),
+  datasets: [
+    {
+      label: 'Percentage (%)',
+      data: sortedResults.map(r => getPercentage(r.totalScore, r.totalMarks)),
+      borderColor: '#60a5fa',
+      backgroundColor: 'rgba(96, 165, 250, 0.2)',
+      tension: 0.3,
+      fill: true,
+      pointRadius: 5,
+      pointHoverRadius: 7,
+    }
+  ]
+}
+
+const chartOptions = {
+  responsive: true,
+  plugins: {
+    legend: { labels: { color: 'white' } },
+    title: {
+      display: true,
+      text: 'Performance Over Time',
+      color: 'white',
+      font: { size: 18, weight: 'bold' }
+    }
+  },
+  scales: {
+    x: {
+      ticks: { color: '#d1d5db' },
+      grid: { color: 'rgba(255,255,255,0.1)' }
+    },
+    y: {
+      ticks: { color: '#d1d5db', callback: val => `${val}%` },
+      grid: { color: 'rgba(255,255,255,0.1)' },
+      min: 0,
+      max: 100
+    }
+  }
+}
+          setChartData(chartData);
+          setChartOptions(chartOptions);
         } else {
           setResults([])
         }
@@ -65,6 +135,27 @@ console.log(results);
         }}>
           Your Exam Results
         </h1>
+
+        {results.length > 1 && (
+  <div style={{
+    background: 'rgba(255, 255, 255, 0.08)',
+    padding: '2rem',
+    borderRadius: '12px',
+    marginBottom: '3rem',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(255,255,255,0.2)'
+  }}>
+    <h2 style={{
+      textAlign: 'center',
+      marginBottom: '1.5rem',
+      fontSize: '1.8rem',
+      fontWeight: '600'
+    }}>
+      📈 Your Improvement Trend
+    </h2>
+    <Line data={chartData} options={chartOptions} />
+  </div>
+)}
 
         <div style={{
           display: 'grid',

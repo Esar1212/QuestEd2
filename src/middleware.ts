@@ -1,32 +1,82 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { jwtVerify } from "jose";//It runs in edge runtime (suitable for middleware) without relying on node built-in modules like jsonwebtoken
 
-export function middleware(request: NextRequest) {
-  // Get the pathname of the request
-  const path = request.nextUrl.pathname;
 
-  // Only handle admin routes
-  if (path.startsWith('/admin')) {
-    // Get the admin token from cookies
-    const adminToken = request.cookies.get('admin_token')?.value || '';
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
 
-    // If trying to access admin routes (except login) without token, redirect to admin login
-    if (!adminToken && path !== '/admin/login') {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
+   if (
+  pathname.startsWith("/student-dashboard") ||
+  pathname.startsWith("/teacher-dashboard")
+) {
+  return NextResponse.next();
+}
+
+
+  /* =====================================================
+     ADMIN ROUTE PROTECTION 
+     ===================================================== */
+
+  if (pathname.startsWith("/admin")) {
+    const adminToken = req.cookies.get("admin_token")?.value || "";
+
+    // Accessing admin routes without token
+    if (!adminToken && pathname !== "/admin/login") {
+      return NextResponse.redirect(
+        new URL("/admin/login", req.url)
+      );
     }
 
-    // If trying to access admin login while already logged in, redirect to admin dashboard
-    if (adminToken && path === '/admin/login') {
-      return NextResponse.redirect(new URL('/admin/adminDashboard', request.url));
+    // Accessing admin login while already logged in
+    if (adminToken && pathname === "/admin/login") {
+      return NextResponse.redirect(
+        new URL("/admin/adminDashboard", req.url)
+      );
     }
   }
+
+  /* =====================================================
+     USER LOGIN / REGISTER ROUTES ONLY
+     ===================================================== */
+ 
+  const authPages =
+  pathname.startsWith("/login") ||
+  pathname.startsWith("/register");
+
+if (!authPages) {
+  return NextResponse.next();
+}
+
+  /* -----------------------------------------
+     1. Check NextAuth session (Google OAuth)
+     ----------------------------------------- */
+  const nextAuthToken = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  if (nextAuthToken) {
+    if (nextAuthToken.userType === "student") {
+      return NextResponse.redirect(
+        new URL("/student-dashboard", req.url)
+      );
+    } else {
+      return NextResponse.redirect(
+        new URL("/teacher-dashboard", req.url)
+      );
+    }
+  }
+
 
   return NextResponse.next();
 }
 
-// Configure which routes to run middleware on
 export const config = {
   matcher: [
-    '/admin/:path*',
+    "/login",
+    "/register",
+    "/admin/:path*",
   ],
-}; 
+};

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -6,20 +7,17 @@ import LoginForm from '@/components/Auth/LoginForm';
 import '@/styles/globals.css';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
-export const dynamic = 'force-dynamic';
-
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/auth/verify', {
+        const response = await fetch('/api/auth/verify-lite', {
           credentials: 'include'
         });
         const authData = await response.json();
-
         if (authData.authenticated) {
           // Redirect based on user type
           const dashboardPath = authData.userType === 'student' 
@@ -35,6 +33,7 @@ export default function LoginPage() {
     };
 
     checkAuth();
+   
   }, [router]);
 
   if (isLoading) {

@@ -16,7 +16,7 @@ export default function RegisterPage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/auth/verify', {
+        const response = await fetch('/api/auth/verify-lite', {
           credentials: 'include'
         });
         const authData = await response.json();

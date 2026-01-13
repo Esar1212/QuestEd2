@@ -15,9 +15,16 @@ const studentSchema = new mongoose.Schema({
     lowercase: true,
     match: [/\S+@\S+\.\S+/, 'is invalid']
   },
+ authProvider: {
+  type: String,
+  enum: ["credentials", "google"],
+  required: true,
+},
   password: {
     type: String,
-    required: true,
+    required: function () {
+    return this.authProvider === "credentials";
+  },
     minlength: 6
   },
   studentType: {

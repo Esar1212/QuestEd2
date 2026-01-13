@@ -11,7 +11,7 @@ const CreateQuestionPaper = () => {
   const [loading, setLoading] = useState(false);
   const [showTypeModal, setShowTypeModal] = useState(false);
   const [pendingAdd, setPendingAdd] = useState(false);
-  
+  const [credType, setCredType] = useState("");
   const router = useRouter();
 
   // Fetch AI-generated data
@@ -120,7 +120,8 @@ const CreateQuestionPaper = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
       alert("Question paper created successfully!");
-      setTitle(""); setClassStream(""); setTotalMarks(""); setTimeLimit(""); setQuestions([]);
+      alert("Redirecting to dashboard...");
+      router.push("/teacher-dashboard");
     } catch (err) {
       alert(err.message);
     } finally {
@@ -183,6 +184,19 @@ const CreateQuestionPaper = () => {
           background: #f0f0f0;
           color: #111;
         }
+          .formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+/* Optional: spacing and consistent typography */
+.formGroup .heading {
+  font-weight: 600;
+  color: #99c2ff;
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+}
         .heading { font-weight: bold; color: #6aa5ff; margin-bottom: 0.3rem; }
         /* Mobile button layout fix */
 @media (max-width: 768px) {
@@ -205,6 +219,23 @@ const CreateQuestionPaper = () => {
   }
 }
  
+}
+@media (min-width: 768px) {
+  .formGroup {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .formGroup .heading {
+    flex: 1;
+    margin-right: 1rem;
+    font-size: 1.05rem;
+  }
+
+  .formGroup .inputField {
+    flex: 2;
+  }
 }
 
       `}</style>
@@ -247,8 +278,79 @@ const CreateQuestionPaper = () => {
           <h3 style={{ marginBottom: "1rem", color: "#fff" }}>Exam Details</h3>
           <label className="heading">Exam Title:</label>
           <input className="inputField" value={title} onChange={e => setTitle(e.target.value)} placeholder="Exam Title" />
-          <label className="heading">Class / Stream:</label>
-          <input className="inputField" value={classStream} onChange={e => setClassStream(e.target.value)} placeholder="Please enter the class or the engineering stream in abbreviation" />
+          <label className="heading">Select Class(for School) or Stream(for College)</label>
+          {/* Class or Stream Selection */}
+          <div className="formGroup">
+               <select
+                className="inputField"
+                value = {credType}
+                onChange={(e) =>{
+                  const selectedType = e.target.value;
+                  setCredType(selectedType);
+                  }}
+                required
+               >
+            <option value="" disabled>
+               Choose Class or Stream
+            </option>
+            <option value="class">Class</option>
+            <option value="stream">Stream</option>
+              </select>
+
+            {/* Conditional rendering based on selection */}
+            {credType === "class" && (
+            <>
+            <label className="heading">Class:</label>
+             <input
+              type="text"
+              className="inputField"
+              placeholder="Enter class (e.g. 10, 11, 12) for which you are setting the question paper"
+              value={classStream}
+              onChange={(e) =>
+              setClassStream(e.target.value)
+              }
+              required
+             />
+            </>
+           )}
+
+         {credType === "stream" && (
+          <>
+           <label className="heading">Select Stream:</label>
+           <select
+            className="inputField"
+            value={classStream}
+            onChange={(e) =>
+              setClassStream(e.target.value)
+             }
+            required
+            >
+        <option value="" disabled>
+          Choose an Engineering Stream
+        </option>
+        <option value="CSE">
+          Computer Science and Engineering
+        </option>
+        <option value="IT">
+          Information Technology
+        </option>
+        <option value="ME">
+          Mechanical Engineering
+        </option>
+        <option value="CE">
+          Civil Engineering
+        </option>
+        <option value="EE">
+          Electrical Engineering
+        </option>
+        <option value="ECE">
+          Electronics & Communication Engineering
+        </option>
+      </select>
+    </>
+  )}
+</div>
+
           <label className="heading">Total Marks:</label>
           <input className="inputField" type="number" value={totalMarks} onWheel={(e) => e.target.blur()} onChange={e => setTotalMarks(e.target.value)} placeholder="Total Marks" />
           <label className="heading">Time Limit (min):</label>

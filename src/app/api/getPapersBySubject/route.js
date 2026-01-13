@@ -8,7 +8,7 @@ export async function GET(request) {
     const headersList = await headers();
     
     // Forward all headers from the original request to verify endpoint
-    const authRes = await fetch('https://quested.onrender.com/auth/verify', {
+    const authRes = await fetch(`${process.env.DOMAIN_URL}/api/auth/verify`, {
       headers: {
         cookie: headersList.get('cookie'),
       }
