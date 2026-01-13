@@ -229,38 +229,47 @@ export default function StudentDashboard() {
               Welcome, {userData?.username || 'Student'}
             </h1>
             </div>
-          <button
-            onClick={handleLogout}
-            style={{
-              background: 'linear-gradient(135deg, #ff4d4d 0%, #ff0000 100%)',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              fontSize: '0.9rem',
-              fontWeight: '500',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 12px rgba(255,0,0,0.2)',
-              position: 'relative',
-              overflow: 'hidden'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 16px rgba(255,0,0,0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,0,0,0.2)';
-            }}
-          >
-            <FiLogOut style={{ fontSize: '1.1rem' }} />
-            Logout
-          </button>
         </div>
+
+      {/* Logout button below header to prevent name truncation on small screens */}
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto 1.5rem',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        position: 'relative',
+        zIndex: 1
+      }}>
+        <button
+          onClick={handleLogout}
+          style={{
+            background: 'linear-gradient(135deg, #ff4d4d 0%, #ff0000 100%)',
+            color: 'white',
+            border: 'none',
+            padding: '0.65rem 1.25rem',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.45rem',
+            fontSize: '0.9rem',
+            fontWeight: '500',
+            transition: 'all 0.25s ease',
+            boxShadow: '0 4px 12px rgba(255,0,0,0.18)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 6px 16px rgba(255,0,0,0.28)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,0,0,0.18)';
+          }}
+        >
+          <FiLogOut style={{ fontSize: '1.05rem' }} />
+          Logout
+        </button>
+      </div>
       </div>
 
       {/* Dashboard Grid */}

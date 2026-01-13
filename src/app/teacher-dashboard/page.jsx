@@ -64,7 +64,7 @@ export default function TeacherDashboard() {
           });
   
           const authData = await authRes.json();
-          //console.log('Auth Data:', authData);
+        
           if (!authRes.ok || !authData.authenticated) {
             throw new Error(authData.error || 'Not authenticated');
           }
@@ -76,7 +76,8 @@ export default function TeacherDashboard() {
           setUserData({
             fullName: authData.fullName,
             subject: authData.subject,
-            qualification: authData.qualification
+            qualification: authData.qualification,
+            image: authData?.image
           });
           if (typeof window !== 'undefined' && authData.subject)
           {
@@ -238,111 +239,120 @@ export default function TeacherDashboard() {
         }} />
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-          <div>
-            <h2 style={{ 
-              fontSize: '2rem', 
-              marginBottom: '1rem', 
-              color: 'white',
-              fontWeight: '600',
-              background: 'linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textShadow: '0 2px 4px rgba(0,0,0,0.1)',
-              position: 'relative',
-              display: 'inline-block'
-            }}>
-              Welcome, Teacher {userData?.fullName}
-              <span style={{
-                position: 'absolute',
-                bottom: '-4px',
-                left: 0,
-                width: '100%',
-                height: '2px',
-                background: 'linear-gradient(90deg, #34D399, #2a5298)',
-                animation: 'width-pulse 2s ease-in-out infinite'
-              }} />
-            </h2>
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.9)', 
-              marginBottom: '0.5rem',
-              fontSize: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}>
-              <span style={{
-                width: '8px',
-                height: '8px',
-                background: '#34D399',
-                borderRadius: '50%',
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            {userData?.image ? (
+              <img
+                src={userData?.image}
+                alt={(userData?.fullName || 'Teacher') + ' avatar'}
+                style={{
+                  width: '64px',
+                  height: '64px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid rgba(255,255,255,0.18)'
+                }}
+              />
+            ) : null}
+            <div>
+              <h2 style={{ 
+                fontSize: '2rem', 
+                marginBottom: '1rem', 
+                color: 'white',
+                fontWeight: '600',
+                background: 'linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                position: 'relative',
                 display: 'inline-block'
-              }} />
-              Department: {userData?.subject}
-            </p>
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.9)',
-              fontSize: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}>
-              <span style={{
-                width: '8px',
-                height: '8px',
-                background: '#34D399',
-                borderRadius: '50%',
-                display: 'inline-block'
-              }} />
-              Qualification: {userData?.qualification}
-            </p>
+              }}>
+                Welcome, Teacher {userData?.fullName}
+                <span style={{
+                  position: 'absolute',
+                  bottom: '-4px',
+                  left: 0,
+                  width: '100%',
+                  height: '2px',
+                  background: 'linear-gradient(90deg, #34D399, #2a5298)',
+                  animation: 'width-pulse 2s ease-in-out infinite'
+                }} />
+              </h2>
+              <p style={{ 
+                color: 'rgba(255, 255, 255, 0.9)', 
+                marginBottom: '0.5rem',
+                fontSize: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <span style={{
+                  width: '8px',
+                  height: '8px',
+                  background: '#34D399',
+                  borderRadius: '50%',
+                  display: 'inline-block'
+                }} />
+                Department: {userData?.subject}
+              </p>
+              <p style={{ 
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontSize: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <span style={{
+                  width: '8px',
+                  height: '8px',
+                  background: '#34D399',
+                  borderRadius: '50%',
+                  display: 'inline-block'
+                }} />
+                Qualification: {userData?.qualification}
+              </p>
+            </div>
           </div>
-          <button 
-            onClick={async () => {
-              try {
-                await fetch('/api/auth/logout', {
-                  method: 'POST',
-                  credentials: 'include'
-                });
-                router.push('/login');
-              } catch (error) {
-                console.error('Logout error:', error);
-              }
-            }}
-            style={{
-              background: 'rgba(220, 53, 69, 0.9)',
-              color: 'white',
-              padding: '0.8rem 1.5rem',
-              borderRadius: '12px',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '0.95rem',
-              transition: 'all 0.3s ease',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              backdropFilter: 'blur(5px)',
-              position: 'relative',
-              overflow: 'hidden',
-              ':hover': { 
-                background: 'rgba(220, 53, 69, 1)',
-                transform: 'translateY(-2px)',
-                boxShadow: '0 4px 12px rgba(220, 53, 69, 0.3)'
-              }
-            }}
-          >
-            <span style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent)',
-              transform: 'translateX(-100%)',
-              animation: 'shimmer 2s infinite'
-            }} />
-            <FiLogOut style={{ fontSize: '1.2rem' }} /> Logout
-          </button>
         </div>
+
+      {/* Logout button below header to avoid truncating name on small screens */}
+      <div style={{
+        maxWidth: '1200px',
+        margin: '1rem auto 1.5rem',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        position: 'relative',
+        zIndex: 1
+      }}>
+        <button
+          onClick={async () => {
+            try {
+              await fetch('/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include'
+              });
+              router.push('/login');
+            } catch (error) {
+              console.error('Logout error:', error);
+            }
+          }}
+          style={{
+            background: 'rgba(220, 53, 69, 0.95)',
+            color: 'white',
+            padding: '0.75rem 1.25rem',
+            borderRadius: '10px',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '0.95rem',
+            transition: 'all 0.25s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            boxShadow: '0 6px 18px rgba(220,53,69,0.18)'
+          }}
+        >
+          <FiLogOut style={{ fontSize: '1.1rem' }} /> Logout
+        </button>
+      </div>
       </div>
 
       {/* Quick Actions Card */}

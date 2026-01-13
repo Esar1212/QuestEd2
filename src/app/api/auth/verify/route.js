@@ -17,7 +17,7 @@ export async function GET(request) {
        1. TRY NEXTAUTH SESSION (Google OAuth)
     ---------------------------------------------------- */
     const session = await getServerSession(authOptions);
-  
+
     if (session?.user?.email) {
       const email = session.user.email;
 
