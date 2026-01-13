@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import dbConnect from '../../../../../lib/dbConnect';
 import Student from '../../../../../models/Student';
 import Teacher from '../../../../../models/Teacher';
-import { authOptions } from "../[...nextauth]/route";
+import { authOptions } from "../../../../../lib/authOptions";
 
 const JWT_SECRET = process.env.JWT_SECRET||'your-secret-key';
 
@@ -17,7 +17,7 @@ export async function GET(request) {
        1. TRY NEXTAUTH SESSION (Google OAuth)
     ---------------------------------------------------- */
     const session = await getServerSession(authOptions);
-
+  
     if (session?.user?.email) {
       const email = session.user.email;
 
@@ -26,6 +26,7 @@ export async function GET(request) {
 
       if (student) {
         return NextResponse.json({
+          image: session.user.image,
           authenticated: true,
           userType: "student",
           userId: student._id,

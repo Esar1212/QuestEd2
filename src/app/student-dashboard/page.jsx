@@ -36,7 +36,8 @@ export default function StudentDashboard() {
           class: authData.class,
           stream: authData.stream,
           rollNumber:authData.rollNumber,
-          year: authData.year
+          year: authData.year,
+          image: authData?.image
         });
         
         setLoading(false);
@@ -199,8 +200,21 @@ export default function StudentDashboard() {
           position: 'relative',
           zIndex: 1
         }}>
-          <div>
-            <h1 style={{ 
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              {userData?.image ? (
+                <img
+                  src={userData?.image}
+                  alt={(userData?.username || 'Student') + " avatar"}
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    border: '2px solid rgba(255,255,255,0.18)'
+                  }}
+                />
+              ) : null}
+              <h1 style={{ 
               fontSize: '2rem', 
               marginTop: '0',
               marginRight: '0',
@@ -214,7 +228,7 @@ export default function StudentDashboard() {
             }}>
               Welcome, {userData?.username || 'Student'}
             </h1>
-          </div>
+            </div>
           <button
             onClick={handleLogout}
             style={{

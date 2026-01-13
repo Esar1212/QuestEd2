@@ -5,7 +5,6 @@ import { useState} from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
-import { callback } from 'chart.js/dist/helpers/helpers.core';
 
 interface LoginFormProps {
   defaultUserType?: 'student' | 'teacher';
@@ -20,6 +19,7 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   
  
@@ -198,14 +198,21 @@ export default function LoginForm({ defaultUserType = 'student' }: LoginFormProp
                 type="button"
                 className="register-button"
                 onClick={async () => {
-                  await signIn('google', {
-                    callbackUrl: '/post-login',
-                  });
+                  try {
+                    setIsGoogleLoading(true);
+                    await signIn('google', {
+                      callbackUrl: '/post-login',
+                    });
+                  } catch (err) {
+                    console.error('Google sign-in error', err);
+                    setIsGoogleLoading(false);
+                  }
                 }}
-                disabled={isLoading}
+                disabled={isGoogleLoading || isLoading}
+                aria-busy={isGoogleLoading}
               >
                 <i className="fab fa-google"></i>
-                Continue with Google
+                {isGoogleLoading ? 'Continuing...' : 'Continue with Google'}
               </button>
 
           <div className="login-link">

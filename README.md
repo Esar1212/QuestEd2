@@ -56,10 +56,3 @@ https://github.com/user-attachments/assets/8fae5edf-77b9-4e40-8d8a-23390526cd62
 - ✅ Anti-cheating measures:
   - Tab switch detection
   
-
----
-## Contributors
-- Shubhradeep Roy ( handling backend API routes , JWT authentication and frontend logic)
-- Rupam Manna ( handling frontend logic )
-- Aastha Shree ( database integration )
-- Pranjal Bhattacharya ( UI designing )

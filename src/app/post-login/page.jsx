@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../../../lib/authOptions";
 import dbConnect from "../../../lib/dbConnect";
 import Student from "../../../models/Student";
 import Teacher from "../../../models/Teacher";
