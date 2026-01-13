@@ -53,7 +53,16 @@ export default function StudentDashboard() {
   }, [router]);
 
   const handleLogout = async () => {
+    // instrumentation: confirm click reached handler
     try {
+      console.log('Logout button clicked (student-dashboard)');
+      if (typeof window !== 'undefined') {
+        // quick visual feedback on mobile to verify the handler runs
+        // remove this after debugging
+        // eslint-disable-next-line no-alert
+        window.alert('Logout clicked — attempting to sign out');
+      }
+
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include',
