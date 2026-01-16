@@ -6,17 +6,22 @@ export async function POST() {
     { status: 200 }
   );
   
-  response.cookies.delete('authToken');
-  /* ---------------------------------------
-     NextAuth session cookies
-  --------------------------------------- */
-  response.cookies.delete("next-auth.session-token");
-  response.cookies.delete("__Secure-next-auth.session-token");
+  // Explicitly clear cookies by setting them with Max-Age=0 and matching attributes.
+  // This helps when cookies were originally set with Secure/HttpOnly/SameSite attributes.
+  const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    path: '/',
+    maxAge: 0,
+  };
 
-  /* ---------------------------------------
-     Optional cleanup cookies
-  --------------------------------------- */
-  response.cookies.delete("next-auth.csrf-token");
-  response.cookies.delete("next-auth.callback-url");
+  // Common cookie names to clear (adjust if you use different names or domain)
+  response.cookies.set('authToken', '', cookieOptions);
+  response.cookies.set('next-auth.session-token', '', cookieOptions);
+  response.cookies.set('__Secure-next-auth.session-token', '', cookieOptions);
+  response.cookies.set('next-auth.csrf-token', '', cookieOptions);
+  response.cookies.set('next-auth.callback-url', '', cookieOptions);
+
   return response;
 }

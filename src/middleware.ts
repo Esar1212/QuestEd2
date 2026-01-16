@@ -37,46 +37,46 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  /* =====================================================
-     USER LOGIN / REGISTER ROUTES ONLY
-     ===================================================== */
+//   /* =====================================================
+//      USER LOGIN / REGISTER ROUTES ONLY
+//      ===================================================== */
  
-  const authPages =
-  pathname.startsWith("/login") ||
-  pathname.startsWith("/register");
+//   const authPages =
+//   pathname.startsWith("/login") ||
+//   pathname.startsWith("/register");
 
-if (!authPages) {
+// if (!authPages) {
+//   return NextResponse.next();
+// }
+
+//   /* -----------------------------------------
+//      1. Check NextAuth session (Google OAuth)
+//      ----------------------------------------- */
+//   const nextAuthToken = await getToken({
+//     req,
+//     secret: process.env.NEXTAUTH_SECRET,
+//   });
+
+//   if (nextAuthToken) {
+//     if (nextAuthToken.userType === "student") {
+//       return NextResponse.redirect(
+//         new URL("/student-dashboard", req.url)
+//       );
+//     } else {
+//       return NextResponse.redirect(
+//         new URL("/teacher-dashboard", req.url)
+//       );
+//     }
+//   }
+
+
   return NextResponse.next();
-}
-
-  /* -----------------------------------------
-     1. Check NextAuth session (Google OAuth)
-     ----------------------------------------- */
-  const nextAuthToken = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-
-  if (nextAuthToken) {
-    if (nextAuthToken.userType === "student") {
-      return NextResponse.redirect(
-        new URL("/student-dashboard", req.url)
-      );
-    } else {
-      return NextResponse.redirect(
-        new URL("/teacher-dashboard", req.url)
-      );
-    }
-  }
-
-
-  return NextResponse.next();
-}
+ }
 
 export const config = {
   matcher: [
-    "/login",
-    "/register",
+    // "/login",
+    // "/register",
     "/admin/:path*",
   ],
 };
