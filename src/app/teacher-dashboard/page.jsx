@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import { FiLogOut } from 'react-icons/fi';
@@ -239,20 +240,54 @@ export default function TeacherDashboard() {
         }} />
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
             {userData?.image ? (
-              <img
-                src={userData?.image}
-                alt={(userData?.fullName || 'Teacher') + ' avatar'}
-                style={{
-                  width: '64px',
-                  height: '64px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '2px solid rgba(255,255,255,0.18)'
-                }}
-              />
-            ) : null}
+              <div style={{
+                position: 'relative',
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                border: '3px solid rgba(255,255,255,0.3)',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+                flexShrink: 0
+              }}>
+                <img
+                  src={userData.image}
+                  alt={(userData.fullName || 'Teacher') + ' avatar'}
+                  crossOrigin="anonymous"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    console.error('Image failed to load:', userData?.image);
+                    e.target.style.display = 'none';
+                  }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block'
+                  }}
+                />
+              </div>
+            ) : (
+              <div style={{
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #34D399, #2a5298)',
+                border: '3px solid rgba(255,255,255,0.3)',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+                flexShrink: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '2rem',
+                fontWeight: 'bold'
+              }}>
+                {userData?.fullName?.charAt(0).toUpperCase()}
+              </div>
+            )}
             <div>
               <h2 style={{ 
                 fontSize: '2rem', 

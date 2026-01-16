@@ -60,7 +60,7 @@ export default function StudentDashboard() {
         // quick visual feedback on mobile to verify the handler runs
         // remove this after debugging
         // eslint-disable-next-line no-alert
-        window.alert('Logout clicked — attempting to sign out');
+        window.alert('Logging out...');
       }
 
       const response = await fetch('/api/auth/logout', {

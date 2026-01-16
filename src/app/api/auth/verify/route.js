@@ -43,6 +43,7 @@ export async function GET(request) {
       if (teacher) {
         return NextResponse.json({
           authenticated: true,
+          image: session.user.image,
           userType: "teacher",
           userId: teacher._id,
           _id: teacher._id,
