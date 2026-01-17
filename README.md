@@ -25,7 +25,7 @@ https://github.com/user-attachments/assets/8fae5edf-77b9-4e40-8d8a-23390526cd62
 |--------------|------------------------------|
 | Frontend     | Next.js (App Router or Pages)|
 | Backend      | Node.js (via API routes)     |
-| Database     | MongoDB + Mongoose           |
+| Database     | MongoDB + Mongoose ORM         |
 | Auth         | JWT (JSON Web Tokens) + NextAuth |
 | Deployment   |  Render                      |
 
@@ -44,6 +44,7 @@ https://github.com/user-attachments/assets/8fae5edf-77b9-4e40-8d8a-23390526cd62
 - Verify email before entering dashboard
 - Attend exams
 - View results post-submission
+- Automatic AI grading and feedback for improvements after exam
 
 ---
 
