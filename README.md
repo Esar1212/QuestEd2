@@ -1,6 +1,6 @@
 # 🎓 Online Examination Portal
 
-An advanced full-stack **Online Examination System** built using **Next.js**, **MongoDB (Mongoose)**, and **JWT authentication**. It supports separate roles for **Students** and **Teachers**, secure login with **SendGrid email verification**, and includes an anti-cheating-enabled exam interface.
+An advanced full-stack **Online Examination System** built using **Next.js**, **MongoDB (Mongoose)**, and **JWT authentication**. It supports separate roles for **Students** and **Teachers**, secure login with **Google OAuth**, and includes an anti-cheating-enabled exam interface.
 
 ---
 
@@ -26,8 +26,7 @@ https://github.com/user-attachments/assets/8fae5edf-77b9-4e40-8d8a-23390526cd62
 | Frontend     | Next.js (App Router or Pages)|
 | Backend      | Node.js (via API routes)     |
 | Database     | MongoDB + Mongoose           |
-| Auth         | JWT (JSON Web Tokens)        |
-| Email        | SendGrid API                 |
+| Auth         | JWT (JSON Web Tokens) + NextAuth |
 | Deployment   |  Render                      |
 
 ---
@@ -51,7 +50,6 @@ https://github.com/user-attachments/assets/8fae5edf-77b9-4e40-8d8a-23390526cd62
 ## 🔒 Security Features
 
 - ✅ JWT-based authentication with role-based access
-- ✅ SendGrid-powered email verification before dashboard access
 - ✅ Protected API routes using middleware
 - ✅ Anti-cheating measures:
   - Tab switch detection
