@@ -47,7 +47,7 @@ export default function Page() {
             return {
               questionId: question._id,
               question: question.question,
-              type: question.type, // <-- ADD THIS LINE
+              type: question.type, 
               studentAnswer: userAnswer,
               correctAnswer: question.answer,
               marks: question.marks,
@@ -110,6 +110,7 @@ export default function Page() {
       }
 
       localStorage.removeItem(`examStartTime_${id}`);
+      localStorage.setItem("PaperSubmitted_"+id, "true");
       router.push('/exam-complete');
     } catch (error) {
       console.error('Submit failed:', error);
@@ -123,10 +124,18 @@ export default function Page() {
     setAnswers((prev) => ({ ...prev, [questionId]: text }));
   };
 
+  useEffect(() =>{
+    if(localStorage.getItem('PaperSubmitted_'+localStorage.getItem('selectedPaperId')))
+       {
+            router.replace('/ExamPapers');
+            localStorage.removeItem('PaperSubmitted_'+localStorage.getItem('selectedPaperId'));
+       }
+  },[router]);
+
   useEffect(() => {
     async function fetchExamData() {
       try {
-        const authRes = await fetch('/api/auth/verify', { credentials: 'include' });
+        const authRes = await fetch('/api/auth/verify-lite', { credentials: 'include' });
         const authData = await authRes.json();
 
         if (!authRes.ok || !authData.authenticated) {
@@ -158,8 +167,7 @@ export default function Page() {
       } finally {
         setLoading(false);
       }
-    }
-
+    }  
     fetchExamData();
   }, [router]);
 

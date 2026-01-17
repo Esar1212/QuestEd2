@@ -22,6 +22,8 @@ export async function GET(req) {
           authenticated: true,
           authType: "credentials",
           userType: decoded.userType,
+          userId: decoded.userId,
+          
         });
       } catch (err) {
         // Invalid or expired manual JWT → fall through
@@ -40,7 +42,8 @@ export async function GET(req) {
       return NextResponse.json({
         authenticated: true,
         authType: "google",
-        userType: nextAuthToken.userType ?? "student", // fallback if needed
+        userType: nextAuthToken.userType,
+        userId: nextAuthToken.userId
       });
     }
 

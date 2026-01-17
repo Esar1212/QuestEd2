@@ -11,25 +11,7 @@ export default function ViewPapersPage() {
   useEffect(() => {
     async function fetchPapers() {
       try {
-        // First verify authentication
-        const authRes = await fetch('/api/auth/verify', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        });
-
-        const authData = await authRes.json();
-        
-        if (!authRes.ok || !authData.authenticated) {
-          console.error('Auth failed:', authData);
-          router.replace('/login'); // Use replace instead of push
-          return;
-        }
-
-        // Then fetch papers
+        // fetch papers
         const res = await fetch('/api/getQuestionPapers', {
           method: 'GET',
           credentials: 'include',
@@ -146,7 +128,7 @@ export default function ViewPapersPage() {
           <div style={{
             display: 'grid',
             gap: '2rem',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
+            
           }}>
             {papers.map((paper) => (
               <div key={paper._id} style={{
