@@ -50,7 +50,9 @@ QuestEd is a **production-grade online examination platform** designed with a **
 QuestEd follows a layered architecture with clear separation of concerns.  
 The system is designed around **stateless backend APIs**, **role-based access control**, and **MongoDB as the single source of truth**, enabling horizontal scalability and fault-tolerant operation.
 
-![QuestEd Architecture](./docs/QuestEd Architecture.png)
+# Architecture Design
+<img width="1596" height="1393" alt="QuestEd Architecture" src="https://github.com/user-attachments/assets/2f85ff5c-66fb-472e-8fa0-714a2895bbd1" />
+
 
 ### Architectural Principles
 - Stateless backend APIs → horizontally scalable
