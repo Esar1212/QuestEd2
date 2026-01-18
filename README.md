@@ -51,7 +51,8 @@ QuestEd follows a layered architecture with clear separation of concerns.
 The system is designed around **stateless backend APIs**, **role-based access control**, and **MongoDB as the single source of truth**, enabling horizontal scalability and fault-tolerant operation.
 
 # Architecture Design
-<img width="1596" height="1393" alt="QuestEd Architecture" src="https://github.com/user-attachments/assets/2f85ff5c-66fb-472e-8fa0-714a2895bbd1" />
+<img width="1752" height="1404" alt="QuestEd Architecture" src="https://github.com/user-attachments/assets/f5821893-f671-4bf3-b33f-16a165ebf4d1" />
+
 
 
 ### Architectural Principles
