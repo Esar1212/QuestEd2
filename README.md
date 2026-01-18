@@ -79,32 +79,15 @@ The system is designed around **stateless backend APIs**, **role-based access co
 
 | Layer        | Technology                  |
 |--------------|------------------------------|
-| Frontend     | Next.js (App Router or Pages)|
-| Backend      | Node.js (via API routes)     |
-| Database     | MongoDB + Mongoose ORM         |
+| Frontend     | Next.js (App router)         |
+| Backend      | Node.js (via Next.js API routes)|
+| Database     | MongoDB + Mongoose ORM       |
 | Auth         | JWT (JSON Web Tokens) + NextAuth |
 | Deployment   |  Render                      |
 | External Services |  OAuth and Gemini AI(semantic evaluation) |
 
 ---
 
-## Project Structure
-
-```text
-QuestEd/
-├── app/            # Next.js app and API routes
-├── components/     # Reusable UI components
-├── services/       # Auth, Exam, Submission, Evaluation logic
-├── models/         # MongoDB schemas
-├── lib/            # Utilities (JWT, DB connection)
-├── docs/
-│   └── architecture.png
-└── README.md
-
-
-
-
----
 
 
 
